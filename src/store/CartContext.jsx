@@ -11,7 +11,6 @@ function cartReducer(state, action) {
         const existingCartItemIndex = state.items.findIndex((item) => item.id === action.item.id)
 
         const updatedItems = [...state.items]   
-        console.log('existingCartItemIndex', existingCartItemIndex)
         if (existingCartItemIndex > -1) {
             //if item already exist
             const existingItem = state.items[existingCartItemIndex]
