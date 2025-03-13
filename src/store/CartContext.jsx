@@ -7,52 +7,67 @@ const CartContext = createContext({
 })
 
 function cartReducer(state, action) {
-    if (action.type === 'ADD_ITEM') {
-        const existingCartItemIndex = state.items.findIndex((item) => item.id === action.item.id)
+	
+	if (action.type === 'ADD_ITEM') {
+		const existingCartItemIndex = state.items.findIndex(
+			(item) => item.id === action.item.id
+		)
 
-        const updatedItems = [...state.items]   
-        if (existingCartItemIndex > -1) {
-            //if item already exist
-            const existingItem = state.items[existingCartItemIndex]
-            const updatedItem = {
-                ...existingItem,
-                quantity: existingItem.quantity + 1
-            }
-            updatedItems[existingCartItemIndex] = updatedItem;
-        }
-        else {
-            updatedItems.push({...action.item ,quantity:1})
-        }
+		const updatedItems = [...state.items]
+		if (existingCartItemIndex > -1) {
+			//if item already exist
+			const existingItem = state.items[existingCartItemIndex]
+			const updatedItem = {
+				...existingItem,
+				quantity: existingItem.quantity + 1,
+			}
+			updatedItems[existingCartItemIndex] = updatedItem
+		} else {
+			updatedItems.push({ ...action.item, quantity: 1 })
+		}
 
-        return {
-            ...state,items:updatedItems
-        }
-    }
-    
-    if (action.type === 'REMOVE_ITEM') {
-        //remove an item from the state
-        const existingCartItemIndex = state.items.findIndex(
-			(item) => item.id === action.id
-        )
-
-        const existingCartItem = state.items[existingCartItemIndex];
-
-        const updatedItems = [...state.items];
-        if (existingCartItem.quantity === 1) {
-            updatedItems.splice(existingCartItemIndex ,1)
-        } else {
-            const updatedItem = { ...existingCartItem, quantity: existingCartItem.quantity - 1 }
-            updatedItem[existingCartItemIndex] = updatedItem;    
-        }
-
-        return {
+		return {
 			...state,
 			items: updatedItems,
 		}
+	}
 
-    }
-    
-    return state;
+	if (action.type === 'REMOVE_ITEM') {
+		//remove an item from the state
+		const existingCartItemIndex = state.items.findIndex(
+			(item) => item.id === action.id.id
+		)
+		
+        // console.log('index', existingCartItem)
+
+        // if (existingCartItemIndex === -1) {
+		// 	console.log('Item not found in cart')
+		// 	return state // No item found, return unchanged state
+        // }
+        
+		const existingCartItem = state.items[existingCartItemIndex]
+		const updatedItems = [...state.items]
+
+		// console.log('1st', existingCartItem)
+        // console.log('2nd', existingCartItem.quantity)
+        
+		if (existingCartItem.quantity === 1) {
+			updatedItems.splice(existingCartItemIndex, 1)
+		} else {
+			const updatedItem = {
+				...existingCartItem,
+				quantity: existingCartItem.quantity - 1,
+			}
+			updatedItems[existingCartItemIndex] = updatedItem
+		}
+
+		return {
+			...state,
+			items: updatedItems,
+		}
+	}
+
+	return state
 }
 
 export function CartContextProvider({ children }) {
