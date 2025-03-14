@@ -19,6 +19,9 @@ export default function Cart() {
 	}
 
     function handleGoToCheckout() {
+        if (cartCtx.items.length === 0) {
+            return
+        }
         userProgressCtx.showCheckout();
     }
 

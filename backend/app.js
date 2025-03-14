@@ -21,7 +21,6 @@ app.get('/meals', async (req, res) => {
 })
 
 app.post('/orders', async (req, res) => {
-    
 	const orderData = req.body.order
 
 	if (
@@ -54,8 +53,21 @@ app.post('/orders', async (req, res) => {
 		...orderData,
 		id: (Math.random() * 1000).toString(),
 	}
-	const orders = await fs.readFile('./data/orders.json', 'utf8')
-	const allOrders = JSON.parse(orders)
+	let allOrders = []
+	try {
+		const orders = await fs.readFile('./data/orders.json', 'utf8')
+		if (orders.trim() === '') {
+			// If file is empty, start with an empty array
+			allOrders = []
+		} else {
+			// Parse the file content if it’s not empty
+			allOrders = JSON.parse(orders)
+		}
+	} catch (err) {
+		// If file doesn’t exist or there’s an error reading it, assume it’s the first order
+		allOrders = []
+	}
+
 	allOrders.push(newOrder)
 	await fs.writeFile('./data/orders.json', JSON.stringify(allOrders))
 	res.status(201).json({ message: 'Order created!' })
