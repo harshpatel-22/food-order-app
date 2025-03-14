@@ -5,6 +5,7 @@ import { currencyFormatter } from '../util/formatting'
 import Input from './UI/Input'
 import Button from './UI/Button'
 import UserProgressContext from '../store/UserProgressContext'
+import axios from 'axios'
 
 export default function Checkout() {
     const cartCtx = useContext(CartContext)
@@ -19,12 +20,26 @@ export default function Checkout() {
         userProgressCtx.hideCheckout()
     }
 
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target)
+        const customerData = Object.fromEntries(formData.entries()) //result the object like {email:test@gmail.com}
+
+        const order = {
+			items: cartCtx.items,
+			customer: customerData,
+		}
+
+        axios.post('http://localhost:3000/orders',{order})
+
+    }
 	return (
 		<Modal open={userProgressCtx.progress === 'checkout'} onClose={handleClose}>
-			<form action=''>
+			<form action='' onSubmit={handleSubmit}>
 				<h2>Checkout</h2>
 				<p>Total Amount:{currencyFormatter.format(cartTotal)}</p>
-				<Input label='Full name' type='text' id='full-name' />
+				<Input label='Full name' type='text' id='name' />
 				<Input label='E-mail address' type='email' id='email' />
 				<Input label='Street' type='text' id='street' />
 				<div className='control-row'>
