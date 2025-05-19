@@ -5,7 +5,6 @@ import { currencyFormatter } from '../util/formatting'
 import Input from './UI/Input'
 import Button from './UI/Button'
 import UserProgressContext from '../store/UserProgressContext'
-import axios from 'axios'
 import useHttp from '../hooks/useHttp'
 import Error from './Error'
 
@@ -20,7 +19,7 @@ const requestConfig = {
 
 export default function Checkout() {
     const cartCtx = useContext(CartContext)
-
+    const apiUrl = import.meta.env.VITE_BACKEND_URL
     const userProgressCtx = useContext(UserProgressContext);
 
     const {
@@ -29,7 +28,7 @@ export default function Checkout() {
 		error,
 		sendRequest,
 		clearData,
-	} = useHttp('http://localhost:3000/orders', requestConfig)
+	} = useHttp(`${apiUrl}/orders`, requestConfig)
 
     const cartTotal = cartCtx.items.reduce((acc, item) => {
 		return acc + item.quantity * item.price

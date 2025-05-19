@@ -5,12 +5,12 @@ import Error from './Error';
 const requestConfig = {}
 
 export default function Meals() {
-
+    const apiUrl = import.meta.env.VITE_BACKEND_URL
     const {
 		data: loadedMeals,
 		isLoading,
 		error,
-	} = useHttp('http://localhost:3000/meals',requestConfig,[])
+	} = useHttp(`${apiUrl}/meals`,requestConfig,[])
 
     if (isLoading) {
         return <p className='center'>Fetching Meals...</p>
